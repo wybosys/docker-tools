@@ -26,7 +26,7 @@ for each in all:
 
     net = json.loads(docker.cmd('network inspect ' + network['Target'], False))[0]
     run.append('--network ' + net['Name'])
-    run.append('--replica ' + repl)
+    run.append('--replicas ' + repl)
     run.append(image)
 
     rms.append(' '.join(rm))
