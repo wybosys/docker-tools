@@ -27,9 +27,10 @@ for each in all:
     for each in spec['Placement']['Constraints']:
         run.append('--constraint "' + each + '"')
 
-    for each in endpoint['Ports']:
-        run.append("-p mode=%s,published=%d,target=%d" %
-                   (each['PublishMode'], each['PublishedPort'], each['TargetPort']))
+    if 'Ports' in endpoint:
+        for each in endpoint['Ports']:
+            run.append("-p mode=%s,published=%d,target=%d" %
+                       (each['PublishMode'], each['PublishedPort'], each['TargetPort']))
 
     net = json.loads(docker.cmd('network inspect ' +
                                 network['Target'], False))[0]
