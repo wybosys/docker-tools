@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import os, docker, json
+import os
+import docker
+import json
 
 all = docker.cmd('service ls')
 runs = []
@@ -24,7 +26,12 @@ for each in all:
     for each in spec['Placement']['Constraints']:
         run.append('--constraint "' + each + '"')
 
-    net = json.loads(docker.cmd('network inspect ' + network['Target'], False))[0]
+    for each in spec['Endpoint']['Ports']:
+        run.append("-p mode=%s,published=%d,target=%d" %
+                   (each['PublishMode'], each['PublishedPort'], each['TargetPort']))
+
+    net = json.loads(docker.cmd('network inspect ' +
+                                network['Target'], False))[0]
     run.append('--network ' + net['Name'])
     run.append('--replicas ' + repl)
     run.append(image)
