@@ -17,6 +17,7 @@ for each in all:
     jsobj = json.loads(docker.cmd('service inspect ' + id, False))[0]
     spec = jsobj['Spec']['TaskTemplate']
     network = spec['Networks'][0]
+    endpoint = jsobj['Endpoint']
 
     run = ['docker service create ']
     rm = ['docker service rm']
@@ -26,7 +27,7 @@ for each in all:
     for each in spec['Placement']['Constraints']:
         run.append('--constraint "' + each + '"')
 
-    for each in spec['Endpoint']['Ports']:
+    for each in endpoint['Ports']:
         run.append("-p mode=%s,published=%d,target=%d" %
                    (each['PublishMode'], each['PublishedPort'], each['TargetPort']))
 
