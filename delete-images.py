@@ -8,6 +8,7 @@ all = docker.cmd('image ls')
 
 for each in all:
     data = each.split(' ')
-    id = data[0]
-    print('删除' + id)
+    name = data[0]
+    id = data[2]
+    print('删除' + name)
     docker.cmd('image rm ' + id)
